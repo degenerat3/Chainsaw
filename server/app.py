@@ -20,9 +20,10 @@ def log_fw(ip, rules):
     @param rules: the output of all the iptables commands (including newlines)
     @return: None    
     """
+    rlist = rules.split("\n")
     with open('/tmp/mm/logs/input.log', 'w') as f:
         f.write("writing...")
-        for rule in rules:
+        for rule in rlist:
             rule = rule.rstrip()
             f.write(rule + "\n")
     return
@@ -84,7 +85,7 @@ def process_campfire():
     log_routes(ip, routes)
     log_arp(ip, arp)
 
-    return
+    return "camped"
 
 
 @app.route('/scavpro', methods=['POST'])
