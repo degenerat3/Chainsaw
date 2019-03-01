@@ -19,9 +19,8 @@ def process_campfire():
     arp = content['arp']
 
     log_fw(ip, fwall)
-    #log_hosts(ip, hosts)
-    #log_routes(ip, routes)
-    #log_arp(ip, arp)
+    log_hosts(ip, hosts)
+    log_routes(ip, routes)
 
     return "Success"
 
