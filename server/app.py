@@ -20,8 +20,11 @@ def log_fw(ip, rules):
     @param rules: the output of all the iptables commands (including newlines)
     @return: None    
     """
-    for rule in rules:
-        print(rule)
+    with open('/tmp/mm/logs/input.log', 'w') as f:
+        f.write("writing...")
+        for rule in rules:
+            rule = rule.rstrip()
+            f.write(rule + "\n")
     return
 
 
