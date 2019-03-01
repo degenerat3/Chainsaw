@@ -7,10 +7,6 @@ import datetime
 import os
 from flask import Flask, request
 
-
-app = Flask(__name__)
-
-
 def log_fw(ip, rules):
     """
     Take in string, which will be all iptables output, split it into one rule per line, log in form:
@@ -93,6 +89,3 @@ def process_campfire():
 def process_scavpro():
     content = request.json
     return
-
-if __name__ == '__main__':
-	app.run(debug=True, host='0.0.0.0')
