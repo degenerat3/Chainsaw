@@ -12,6 +12,7 @@ RUN pip3 install -r requirements.txt
 # Set up the data directories for the app
 COPY . /app
 RUN mkdir -p /tmp/mm/logs
+RUN touch /tmp/mm/logs/input.log
 
 
 # Run the app
