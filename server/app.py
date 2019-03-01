@@ -21,6 +21,7 @@ def log_fw(ip, rules):
     @return: None    
     """
     rlist = rules.split("\n")
+    print(rlist)
     with open('/tmp/mm/logs/input.log', 'w') as f:
         f.write("writing...")
         for rule in rlist:
