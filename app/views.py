@@ -6,6 +6,7 @@ Process POST requests from clients, log data to files so it can be sent with fil
 import datetime
 import os
 from flask import Flask, request
+from . import app
 
 def log_fw(ip, rules):
     """
@@ -82,10 +83,10 @@ def process_campfire():
     #log_routes(ip, routes)
     #log_arp(ip, arp)
 
-    return "camped"
+    return "Success"
 
 
 @app.route('/scavpro', methods=['POST'])
 def process_scavpro():
     content = request.json
-    return
+    return "Success"
