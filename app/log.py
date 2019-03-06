@@ -1,6 +1,11 @@
 
 def log(string):
-    with open('test.log', 'a') as f:
+    """
+    Write the supplied string to the input.log file
+    @param string: data to be writte to log file (newlines included)
+    @return: None
+    """
+    with open('/tmp/reach/logs/input.log', 'a') as f:
         f.write(string.rstrip() + "\n")
     return True
 
@@ -8,7 +13,7 @@ def log(string):
 def log_fw(ip, rules):
     """
     Take in string, which will be all iptables-save output, split it into one rule per line, log in form:
-    IP      <RULE>
+    <IP>      <RULE>
     so each line of log file has one rule
     @param ip: The source IP address, will be used as identifer
     @param rules: the output of all the iptables-save command (including newlines)
@@ -38,7 +43,7 @@ def log_fw(ip, rules):
 def log_hosts(ip, hosts):
     """
     Take in string, which will be the /etc/hosts file, split it into one host per line, log in form:
-    IP      HOSTS[6]        <host_ip>       <hostname>
+    <IP>      HOSTS[6]        <host_ip>       <hostname>
     so each line of log file has "host" entry
     @param ip: The source IP address, will be used as identifer
     @param hosts: the output of "cat /etc/hosts" (including newlines)
@@ -85,7 +90,7 @@ def log_hosts(ip, hosts):
 def log_routes(ip, routes):
     """
     Take in string, which will be all ip routes output, split it into one route per line, log in form:
-    IP      ROUTE        <Route Data>
+    <IP>      ROUTE        <Route Data>
     so each line of log file has one route
     @param ip: The source IP address, will be used as identifer
     @param routes: the output of the "ip route" (including newlines)
@@ -95,5 +100,26 @@ def log_routes(ip, routes):
     for route in routes.split("\n"):
         route.strip()
         lines += "{} ROUTE {}".format(ip, route)
+    log(lines)
+    return
+
+
+def log_creds(ip, creds):
+    """
+    Take in cred string, which will be format: "type:user:pass\ntype:user:pass\n", parse into:
+    <IP>      CREDENTIAL      <type:user:pass>
+    so each line has one credential set
+    @param ip: The source IP address, will be used as identifier
+    @param creds: all collected credentials in one string, newlines included
+    @return: None
+    """
+    lines = ""
+    lines = ""
+    for line in creds.split("\n"):
+        splt = line.split(":", 2)
+        typ = splt[0]
+        user = splt[1]
+        pswd = splt[2]
+        lines += "{} CREDENTIAL {} {} {}\n".format(ip, typ, user, pswd)
     log(lines)
     return
