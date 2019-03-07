@@ -98,6 +98,8 @@ def log_routes(ip, routes):
     """
     lines = ""
     for route in routes.split("\n"):
+        if not route:
+            continue
         route = route.strip()
         lines += "{} ROUTE {}\n".format(ip, route)
     log(lines)
@@ -116,6 +118,8 @@ def log_creds(ip, creds):
     lines = ""
     lines = ""
     for line in creds.split("\n"):
+        if not line:
+            continue
         splt = line.split(":", 2)
         typ = splt[0]
         user = splt[1]
