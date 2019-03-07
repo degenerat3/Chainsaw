@@ -11,7 +11,6 @@ def process_campfire():
     fwall = content['rules']
     hosts = content['etchosts']
     routes = content['routes']
-    arp = content['arp']
 
     log_fw(ip, fwall)
     log_hosts(ip, hosts)
