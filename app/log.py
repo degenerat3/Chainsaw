@@ -98,8 +98,8 @@ def log_routes(ip, routes):
     """
     lines = ""
     for route in routes.split("\n"):
-        route.strip()
-        lines += "{} ROUTE {}".format(ip, route)
+        route = route.strip()
+        lines += "{} ROUTE {}\n".format(ip, route)
     log(lines)
     return
 
