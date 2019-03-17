@@ -1,5 +1,6 @@
 FROM alpine:latest
 RUN apk add --update python3 tzdata
+RUN apk add --no-cache bash
 
 # Set the timezone
 ENV TZ=America/New_York
@@ -13,7 +14,7 @@ RUN pip3 install -r requirements.txt
 COPY . /app
 RUN mkdir -p /tmp/reach/logs
 RUN touch /tmp/reach/logs/input.log
-
+RUN bash fb_setup.sh
 
 # Run the app
 ENTRYPOINT [ "python3" ]
