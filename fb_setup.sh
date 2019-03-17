@@ -37,7 +37,3 @@ EOM
 
 echo "$CONF" > filebeat.yml
 
-./filebeat setup --dashboards
-
-./filebeat &
-
