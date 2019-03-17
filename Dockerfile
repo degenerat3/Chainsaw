@@ -1,6 +1,7 @@
 FROM alpine:latest
 RUN apk add --update python3 tzdata
 RUN apk add --no-cache bash
+RUN apk add --no-cache curl
 
 # Set the timezone
 ENV TZ=America/New_York
