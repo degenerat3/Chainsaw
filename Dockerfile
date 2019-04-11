@@ -14,7 +14,6 @@ COPY . /app
 RUN mkdir -p /tmp/reach/logs
 RUN touch /tmp/reach/logs/input.log
 
-
 # Run the app
 ENTRYPOINT [ "python3" ]
 CMD [ "app.py" ]

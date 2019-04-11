@@ -1,3 +1,25 @@
+import socket
+import os
+
+SYSLOGSOCK = None
+HOST=os.environ.get("SYSLOG_HOST", None)
+PORT=int(os.environ.get("SYSLOG_PORT", -1))
+
+LOGFILE=os.environ.get("LOGFILE", "/tmp/reach.log")
+
+def send_syslog(string):
+    """Send a syslog to the server. Make sure the port is open though
+    """
+    global SYSLOGSOCK
+    string = "REACH " + string.rstrip()
+    string = string.replace("\n", "\nREACH ") + "\n"
+    if not SYSLOGSOCK:
+        print("Creating socket to", HOST, PORT)
+        SYSLOGSOCK = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        SYSLOGSOCK.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        SYSLOGSOCK.connect((HOST, PORT))
+    SYSLOGSOCK.sendall(string.encode())
+
 
 def log(string):
     """
@@ -5,8 +27,11 @@ def log(string):
     @param string: data to be writte to log file (newlines included)
     @return: None
     """
-    with open('/tmp/reach/logs/input.log', 'a') as f:
-        f.write(string.rstrip() + "\n")
+    if not HOST or PORT == -1:
+        send_syslog(string)
+    else:
+        with open(LOGFILE, 'a') as f:
+            f.write(string.rstrip() + "\n")
     return True
 
 
@@ -17,7 +42,7 @@ def log_fw(ip, rules):
     so each line of log file has one rule
     @param ip: The source IP address, will be used as identifer
     @param rules: the output of all the iptables-save command (including newlines)
-    @return: None    
+    @return: None
     """
     lines = ""
     # Loop through all the rules and rebuild the command used to insert the rule
@@ -36,9 +61,9 @@ def log_fw(ip, rules):
         if line.lstrip().startswith("*"):
             current_table = line.lstrip("*")
             continue
-        lines += "{} iptables -t {} {}\n".format(ip, current_table, line)
+        lines += "FIREWALL {} iptables -t {} {}\n".format(ip, current_table, line)
     log(lines)
-    
+
 
 def log_hosts(ip, hosts):
     """
@@ -47,7 +72,7 @@ def log_hosts(ip, hosts):
     so each line of log file has "host" entry
     @param ip: The source IP address, will be used as identifer
     @param hosts: the output of "cat /etc/hosts" (including newlines)
-    @return: None    
+    @return: None
     """
     def is_hostname_local(hostname):
         # Skip certain default host values
@@ -56,7 +81,7 @@ def log_hosts(ip, hosts):
             if v in hostname:
                 return True
         return False
-    
+
     lines = ""
     for line in hosts.split("\n"):
         line = line.strip()
@@ -75,12 +100,12 @@ def log_hosts(ip, hosts):
                 typ = "HOSTS6"
             else:
                 # We _should_ never get this, who knows
-                typ = "HOSTS_UNKNOWN"
+                typ = "HOSTSUNKNOWN"
             for hostname in hosts:
                 hostname = hostname.lower()
                 if is_hostname_local(hostname):
                     continue
-                lines += "{} {} {} {}\n".format(ip, typ, addr, hostname)
+                lines += "{} {} {} {}\n".format(typ, ip, addr, hostname)
         except ValueError:
             continue
     log(lines)
@@ -94,14 +119,14 @@ def log_routes(ip, routes):
     so each line of log file has one route
     @param ip: The source IP address, will be used as identifer
     @param routes: the output of the "ip route" (including newlines)
-    @return: None    
+    @return: None
     """
     lines = ""
     for route in routes.split("\n"):
         if not route:
             continue
         route = route.strip()
-        lines += "{} ROUTE {}\n".format(ip, route)
+        lines += "ROUTE {} {}\n".format(ip, route)
     log(lines)
     return
 
@@ -124,6 +149,6 @@ def log_creds(ip, creds):
         typ = splt[0]
         user = splt[1]
         pswd = splt[2]
-        lines += "{} CREDENTIAL {} {} {}\n".format(ip, typ, user, pswd)
+        lines += "CREDENTIAL {} {} {} {}\n".format(ip, typ, user, pswd)
     log(lines)
     return
