@@ -8,7 +8,11 @@ from app import app
 
 if __name__ == '__main__':
     host = os.environ.get("FLASK_HOST", "0.0.0.0")
-    port = os.environ.get("FLASK_PORT", "5000")
+    try:
+        port = os.environ.get("FLASK_PORT", "5000")
+        port = int(port)
+    except ValueError:
+        port = 5000
     debug = os.environ.get("FLASK_DEBUG", "True")
     debug = debug.lower().strip() in ["true", "yes", "1", "t"]
     app.run(debug=debug, host=host, port=port)
