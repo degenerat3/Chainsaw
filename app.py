@@ -3,6 +3,7 @@ Process POST requests from clients, log data to files so it can be sent with fil
 @author: degenerat3, knif3
 """
 
+import os
 from app import app
 
 if __name__ == '__main__':

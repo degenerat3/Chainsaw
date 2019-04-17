@@ -3,7 +3,10 @@ import os
 
 SYSLOGSOCK = None
 HOST=os.environ.get("SYSLOG_HOST", None)
-PORT=int(os.environ.get("SYSLOG_PORT", -1))
+try:
+    PORT=int(os.environ.get("SYSLOG_PORT", -1))
+except ValueError:
+    PORT=-1
 
 LOGFILE=os.environ.get("LOGFILE", "/tmp/reach.log")
 
@@ -27,7 +30,7 @@ def log(string):
     @param string: data to be writte to log file (newlines included)
     @return: None
     """
-    if not HOST or PORT == -1:
+    if HOST and PORT != -1:
         send_syslog(string)
     else:
         with open(LOGFILE, 'a') as f:

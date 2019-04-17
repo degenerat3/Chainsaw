@@ -1,5 +1,4 @@
 import datetime
-import os
 from flask import Flask, request
 from . import app
 from .log import *
