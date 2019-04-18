@@ -3,6 +3,11 @@ from flask import Flask, request
 from . import app
 from .log import *
 
+@app.route('/')
+@app.route('/status')
+def index():
+    return "REACH is running"
+
 @app.route('/campfire', methods=['POST'])
 def process_campfire():
     content = request.json
