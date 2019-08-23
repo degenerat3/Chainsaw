@@ -8,14 +8,14 @@ try:
 except ValueError:
     PORT=-1
 
-LOGFILE=os.environ.get("LOGFILE", "/tmp/reach.log")
+LOGFILE=os.environ.get("LOGFILE", "/tmp/chainsaw.log")
 
 def send_syslog(string):
     """Send a syslog to the server. Make sure the port is open though
     """
     global SYSLOGSOCK
-    string = "REACH " + string.rstrip()
-    string = string.replace("\n", "\nREACH ") + "\n"
+    string = "CHAINSAW " + string.rstrip()
+    string = string.replace("\n", "\nCHAINSAW ") + "\n"
     if not SYSLOGSOCK:
         print("Creating socket to", HOST, PORT)
         SYSLOGSOCK = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
