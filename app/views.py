@@ -6,7 +6,7 @@ from .log import log, log_creds, log_fw, log_generic, log_hosts, log_routes
 @app.route('/')
 @app.route('/status')
 def index():
-    return "REACH is running"
+    return "Chainsaw is running"
 
 @app.route('/campfire', methods=['POST'])
 def process_campfire():
