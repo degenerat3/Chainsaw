@@ -1,4 +1,5 @@
-import datetime
+import requests
+import os
 from flask import Flask, request
 from . import app
 from .log import log, log_creds, log_fw, log_generic, log_hosts, log_routes
@@ -41,3 +42,15 @@ def process_scavpro():
     creds = content['credentials']
     log_creds(ip, creds)
     return "Success"
+
+
+@app.route("/pwnboard", methods=['POST'])
+def checkin():
+    content = request.json
+    pwnboard = os.environ.get("PWNBOARD_URL", "http://pwnboard.win").rstrip("/")
+    host = "{}/generic".format(pwnboard)
+    try:
+        req = requests.post(host, json=content, timeout=3)
+        return req.text
+    except Exception as E:
+        return "invalid"
