@@ -1,5 +1,5 @@
 FROM alpine:latest
-RUN apk add --update python3 tzdata
+RUN apk add --update python3 tzdata py3-pip
 
 # Set the timezone
 ENV TZ=America/New_York
