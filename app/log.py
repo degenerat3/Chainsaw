@@ -22,7 +22,7 @@ def send_syslog(string):
         SYSLOGSOCK.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         SYSLOGSOCK.connect((HOST, PORT))
     try:
-        SYSLOGSOCK.sendall("CHAINSAW CONN_TEST hello world\n".encode()) # make sure socket is still active
+        SYSLOGSOCK.sendall(string.encode()) # make sure socket is still active
     except:
         print("Creating socket to", HOST, PORT)
         SYSLOGSOCK = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
